@@ -21,9 +21,9 @@ public class Q_1246 {
 
         for (int i = 0; i < m; i++) {
             int count;
-            if (n < m - i) {
+            if (n < m - i) { // 계란 수가 부족한 경우
                 count = n;
-            } else {
+            } else { // 계란이 충분한 경우
                 count = m - i;
             }
             temp = arr[i] * count;
