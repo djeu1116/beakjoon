@@ -1,15 +1,28 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 class Solution {
-    public ArrayList<Integer> solution(int[] array, int[][] commands) {
-        ArrayList<Integer> answer = new ArrayList<>();
-        for (int[] command : commands) {
-            int[] temp = {};
-            temp = Arrays.copyOfRange(array, command[0] - 1, command[1] - 1);
-            Arrays.sort(temp);
-            answer.add(temp[command[2]]);
+    public String solution(int[] numbers) {
+        String answer = "";
+
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < numbers.length; i++) {  // -> 3 30 34 5 9
+            list.add(numbers[i]);
         }
-        return answer;
+        Collections.sort(list, (a, b) -> {
+            String as = String.valueOf(a), bs = String.valueOf(b);
+            return Integer.compare(Integer.parseInt(as + bs), Integer.parseInt(bs + as));
+        });
+        StringBuilder sb = new StringBuilder();
+        for(Integer i : list) {
+            sb.append(i);
+        }
+        answer = sb.toString();
+        if(answer.charAt(0) == '0') {
+            return "0";
+        }else {
+            return answer;
+        }
     }
 }
