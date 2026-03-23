@@ -3,85 +3,89 @@ package datastructure;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Q_1043 {
 
-    static int[] parents;
-    static List<Integer> party;
+    public static ArrayList<Integer>[] party;
+    public static int[] parent;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
 
-        parents = new int[n+1];
-        for(int i=1; i<n+1; i++) {
-            parents[i] = i;
-        }
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
         st = new StringTokenizer(br.readLine());
-        int en= Integer.parseInt(st.nextToken());
-        party = new ArrayList<>();
-        if(en==0) {
-            System.out.println(m);
-            return;
-        }
-        else{
-            for(int i=0; i<en; i++) {
-                party.add(Integer.parseInt(st.nextToken()));
-            }
+        int k = Integer.parseInt(st.nextToken());
+
+        int[] truth = new int[k];
+
+        for (int i = 0; i < k; i++) {
+            truth[i] = Integer.parseInt(st.nextToken());
         }
 
-        List<Integer>[] partyList = new ArrayList[m];
-        for (int i = 0; i < m; i++) {
-            partyList[i] = new ArrayList<>();
-        }
-
-        for (int i = 0; i < m; i++) {
+        parent = new int[N + 1];
+        party = new ArrayList[M];
+        for (int i = 0; i < M; i++) {
+            party[i] = new ArrayList<>();
             st = new StringTokenizer(br.readLine());
-            int pn = Integer.parseInt(st.nextToken());
+            int peoples = Integer.parseInt(st.nextToken());
 
-            int x = Integer.parseInt(st.nextToken());
-            partyList[i].add(x);
-            for (int j = 1; j < pn; j++) {
-                int y = Integer.parseInt(st.nextToken());
-                union(x, y);
-                partyList[i].add(y);
+            for (int j = 0; j < peoples; j++) {
+                party[i].add(Integer.parseInt(st.nextToken()));
             }
         }
 
-        int count = 0;
-        for (int i = 0; i < m; i++) {
+        for (int i = 0; i <= N; i++) {
+            parent[i] = i;
+        }
+
+        for (int i = 0; i < M;  i++) {
+            int man = party[i].get(0);
+            for (int j = 1; j < party[i].size(); j++) {
+                union(man, party[i].get(j));
+            }
+        }
+
+        int cnt = 0;
+        for (int i = 0; i < M; i++) {
+            int leader = party[i].get(0);
             boolean flag = true;
-            for (int num : partyList[i]) {
-                if (party.contains(find(parents[num]))) {
+            for (int j = 0; j < k; j++) {
+                if (isItSame(leader, truth[j])) {
                     flag = false;
                     break;
                 }
             }
+
             if (flag) {
-                count++;
+                cnt++;
             }
         }
-        System.out.println(count);
+        System.out.println(cnt);
+        br.close();
     }
 
-    static int find(int x) {
-        if (parents[x] == x) return x;
-        return find(parents[x]);
-    }
-
-
-    static void union(int x, int y) {
-        int rx = find(x);
-        int ry = find(y);
-        if (party.contains(ry)) {
-            int temp = rx;
-            rx = ry;
-            ry = temp;
+    public static void union(int a, int b) {
+        a = find(a);
+        b = find(b);
+        if (a != b) {
+            parent[b] = a;
         }
+    }
 
-        parents[ry] = rx;
+    public static int find(int a) {
+        if (parent[a] == a) {
+            return a;
+        } else {
+            return parent[a] = find(parent[a]);
+        }
+    }
+
+    public static boolean isItSame(int a, int b) {
+        return find(a) == find(b);
     }
 }
