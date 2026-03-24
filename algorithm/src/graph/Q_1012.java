@@ -3,62 +3,72 @@ package graph;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Q_1012 {
-
-    static int m, n, k;
+    static int N, M, K;
     static int[][] field;
     static boolean[][] visited;
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {1, -1, 0, 0};
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int t = Integer.parseInt(br.readLine());
+        int T = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < t; i++) {
+        for (int i = 0; i < T; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            m = Integer.parseInt(st.nextToken());
-            n = Integer.parseInt(st.nextToken());
-            k = Integer.parseInt(st.nextToken());
+            N = Integer.parseInt(st.nextToken());
+            M = Integer.parseInt(st.nextToken());
+            K = Integer.parseInt(st.nextToken());
+            int count = 0;
+            field = new int[N][M];
+            visited = new boolean[N][M];
 
-            field = new int[m][n];
-            visited = new boolean[m][n];
-
-            for (int j = 0; j < k;  j++) {
+            for (int j = 0; j < K; j++) {
                 st = new StringTokenizer(br.readLine());
                 int x = Integer.parseInt(st.nextToken());
                 int y = Integer.parseInt(st.nextToken());
                 field[x][y] = 1;
             }
 
-            int bug = 0;
-            for (int x = 0; x < m; x++) {
-                for (int y = 0; y < n; y++) {
-                    if (field[x][y] == 1 && visited[x][y] == false) {
-                        bug++;
-                        dfs(x, y);
+            for (int j = 0; j < N; j++) {
+                for (int k = 0; k < M; k++) {
+                    if (field[j][k] == 1 && !visited[j][k]) {
+                        solution(j, k);
+                        count ++;
                     }
                 }
             }
-            System.out.println(bug);
+            System.out.println(count);
         }
+
         br.close();
     }
 
-    public static void dfs(int x, int y) {
+    static void solution(int x, int y) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[] {x, y});
         visited[x][y] = true;
 
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            x = curr[0];
+            y = curr[1];
 
-            if (nx >= 0 && ny >= 0 && nx < m && ny < n) {
-                if (field[nx][ny] == 1 && visited[nx][ny] == false) {
-                    dfs(nx, ny);
+            for (int i = 0; i < 4; i++) {
+                int cx = x + dx[i];
+                int cy = y + dy[i];
+                if (cx >= 0 && cx < N && cy >= 0 && cy < M) {
+                    if (!visited[cx][cy] && field[cx][cy] == 1) {
+                        q.add(new int[] {cx, cy});
+                        visited[cx][cy] = true;
+                    }
                 }
             }
         }
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Q_2178 {
+public class Q_2178 { // 최단거리 구하는 것은 무조건 큐로 풀 것
 
     static int N;
     static int M;
