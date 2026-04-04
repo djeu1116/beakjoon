@@ -1,37 +1,32 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 class Solution {
-    public int solution(int n, int[] lost, int[] reserve) {
-        int answer = 0;
-        int[] students = new int[n];
-        Arrays.fill(students, 1);
-        Arrays.sort(lost);
-        Arrays.sort(reserve);
-
-        for (int l : lost) {
-            students[l - 1] -= 1;
+    public String solution(int[] numbers) {
+        StringBuilder answer = new StringBuilder();
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int num : numbers) {
+            list.add(num);
         }
 
-        for (int r : reserve) {
-            students[r - 1] += 1;
-        }
+        list.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                String s1 = String.valueOf(o1);
+                String s2 = String.valueOf(o2);
 
-        for (int i = 0; i < n; i++) {
-            if (students[i] == 0) {
-                if (i - 1 >= 0 && students[i - 1] == 2) {
-                    students[i - 1] -= 1;
-                    students[i] += 1;
-                } else if (i + 1 < n && students[i + 1] == 2) {
-                    students[i + 1] -= 1;
-                    students[i] += 1;
-                }
+                return (s2 + s1).compareTo(s1 + s2);
             }
+        });
 
-            if (students[i] > 0) {
-                answer ++;
-            }
+        if (list.get(0).equals(0)) {
+            return "0";
         }
 
-        return answer;
+        for (int num : list) {
+            answer.append(num);
+        }
+
+        return answer.toString();
     }
 }
